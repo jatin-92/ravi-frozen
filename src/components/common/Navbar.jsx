@@ -6,15 +6,14 @@ import Image from "next/image";
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null); // 🔥 Ref for sidebar
+  const sidebarRef = useRef(null);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const closeSidebar = () => setIsSidebarOpen(false);
 
-  // Auto-close sidebar if screen is resized above xl (1280px)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1280) {
+      if (window.innerWidth >= 768) {
         setIsSidebarOpen(false);
       }
     };
@@ -23,12 +22,10 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Disable body scroll when sidebar is open
   useEffect(() => {
     document.body.style.overflow = isSidebarOpen ? "hidden" : "auto";
   }, [isSidebarOpen]);
 
-  // Detect click outside of sidebar
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -46,17 +43,17 @@ const Navbar = () => {
   }, [isSidebarOpen]);
 
   return (
-    <nav className="w-full mb-[-100px]">
-      <div className=" px-4 relative">
+    <header className="w-full mb-[-100px]">
+      <nav className=" px-4 relative">
         {/* Top Navbar */}
         <div className="max-w-[1142px] w-full flex justify-between mx-auto h-[80px] lg:h-[100px] items-center">
           <Link href="/" className="flex items-center">
             <Image
               src="/assets/images/logo.png"
               alt="Logo"
-              className="max-w-[176px] w-full h-[74px]"
               width={176}
               height={74}
+              unoptimized
             />
           </Link>
 
@@ -73,7 +70,7 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
-          <button className=" bg-white  hidden md:flex  h-[40px] lg:h-[48px] justify-center items-center rounded-4xl w-[165px] lg:w-[175px] transition-all cursor-pointer text-[#29E0FF] text-center text-base font-bold leading-[120%] z-10 border border-white relative hover:bg-[#29E0FF] hover:text-white max-[320px]:h-[40px] duration-700">
+          <button className=" bg-white  hidden md:flex  h-[40px] lg:h-[48px] justify-center items-center rounded-4xl w-[165px] lg:w-[175px] transition-all cursor-pointer text-[#29E0FF] text-center text-base font-bold leading-[120%] z-10 border border-white relative hover:bg-transparent hover:text-white max-[320px]:h-[40px] duration-700">
             {/* <NavbarBtnIcon /> */}
             Customer Login
           </button>
@@ -93,7 +90,7 @@ const Navbar = () => {
         <div
           ref={sidebarRef}
           id="sidebar"
-          className={`fixed top-0 bg-[#29E0FF] max-w-[800px] w-full h-screen z-50 overflow-auto transition-all duration-500 ease-in-out xl:hidden pt-10 ${
+          className={`fixed top-0 bg-[#29E0FF] w-full sm:w-[50%] h-screen z-50 overflow-auto transition-all duration-500 ease-in-out xl:hidden pt-20 ${
             isSidebarOpen ? "left-0" : "-left-[100%]"
           }`}
         >
@@ -104,6 +101,16 @@ const Navbar = () => {
           >
             +
           </p>
+
+          <Link href="/" className="absolute top-4 left-4">
+            <Image
+              src="/assets/images/logo.png"
+              alt="Logo"
+              width={126}
+              height={54}
+              unoptimized
+            />
+          </Link>
 
           {/* Sidebar Links */}
           <div className="text-white flex flex-col gap-[30px] items-center px-3 ">
@@ -126,8 +133,8 @@ const Navbar = () => {
             </button>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 };
 
